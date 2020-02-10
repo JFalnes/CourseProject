@@ -1,7 +1,6 @@
 import socket
 import threading
 import logging
-import struct
 
 class StockItem:
     def __init__(self, code, description, amount):

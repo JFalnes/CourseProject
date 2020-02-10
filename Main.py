@@ -1,6 +1,8 @@
 import socket
 import threading
 import logging
+import csv
+
 
 class StockItem:
     def __init__(self, code, description, amount):
@@ -53,10 +55,10 @@ def handle_conn(client):
         amount = x[2]
         print(code, desc, amount)
 
-        logging.info(str(addr) + " sent: " + code, desc, amount)
-        with open('sample.txt', 'a+') as file:
-            file.write(coderecv)
-            file.write('\n')
+        logging.info(str(addr) + " sent: " + coderecv)
+        with open('sample.txt', 'a+') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow([code, desc, amount])
 
 
 serv_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # IPv4 / TCP

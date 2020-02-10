@@ -1,16 +1,17 @@
 import socket
 import threading
-
+import logging
+import struct
 
 class StockItem:
     def __init__(self, code, description, amount):
         self.code = code
         self.description = description
         self.amount = amount
-        self.itemDesc = "{}, {}, {}".format(self.code, self.description, self.amount)
 
     def return_item(self):
-        pass
+        self.itemDesc = "{}, {}, {}".format(self.code, self.description, self.amount)
+
 
 
 class StockTracker(StockItem):
@@ -26,30 +27,43 @@ addresses = {}
 
 
 a = StockItem(1, 2, 3)
-a.return_item()
-print(a.itemDesc)
+
+
+logFormat = "%(asctime)s: %(message)s"
+logging.basicConfig(format=logFormat, level=logging.INFO,
+                    datefmt="%H:%M:%S")
 
 
 def incoming_connection():
+    global addr
     while True:
         conn, addr = serv_socket.accept()
         addresses[conn] = addr
-        print("Connection established", conn)
+        logging.info(f'Connection established with {str(conn)}')
+        conn.sendall(bytes(('Connection Established with ' + str(addr)),  'utf8'))
         t3 = threading.Thread(target=handle_conn, args=(conn,))
+        t3.start()
 
 
 def handle_conn(client):
     while True:
-        a = client.recv(BUFFER).decode('utf8')
-        print(a.decode('utf8'))
-        client.send(a, 'utf8')
+        coderecv = client.recv(BUFFER).decode('utf8')
+        x = coderecv.split(":")
+        code = x[0]
+        desc = x[1]
+        amount = x[2]
+        print(code, desc, amount)
+
+        logging.info(str(addr) + " sent: " + code, desc, amount)
+        with open('sample.txt', 'a+') as file:
+            file.write(coderecv)
+            file.write('\n')
 
 
 serv_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # IPv4 / TCP
-print(serv_socket)
 serv_socket.bind((HOST, PORT))
 serv_socket.listen(5)
-print("Waiting for connection...")
+logging.info("Waiting for connection...")
 
 serv_thread = threading.Thread(target=incoming_connection)
 serv_thread.start()

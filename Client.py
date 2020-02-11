@@ -22,8 +22,6 @@ def add_item():
     messagebox.showinfo("Item Added", abc)
 
 
-
-
 def conn_recv():
     b = client_socket.recv(BUFFER).decode('utf8')
     logging.info(b)
@@ -78,6 +76,7 @@ try:
 
 except ConnectionRefusedError:
     conn_ref = messagebox.showinfo("Connection Refused", "Connection Refused. Please try again.")
+
 t3 = threading.Thread(target=conn_recv)
 t3.start()
 t4 = threading.Thread(target=tk_window)

@@ -31,17 +31,24 @@ class StockTracker:
         self.new_value = new_value
         with open('stock.csv', 'a+', newline='') as csv_file:
             for row in csv_file:
-                print(row)
+                return row
         text = open("stock.csv", 'r')
         text = "".join([i for i in text]).replace(self.old_value, self.new_value)
         p = open('stock.csv', 'w')
         p.writelines(text)
 
-    def show_item(self):
+    def show_item(self, choose_item):
+        self.choose_item = choose_item
         with open('stock.csv', 'r', newline='') as csv_file:
             for row in csv_file.readlines():
-                if self.code in row:
-                    print(row)
+                if self.choose_item in row:
+                    return row
+
+    def show_stock(self):
+        """WIP"""
+        with open('stock.csv', 'r', newline='') as csv_file:
+            for row in csv_file.readlines():
+                print(row.strip().replace(";", " "))
 
 
 class StockItem(StockTracker):
@@ -49,10 +56,12 @@ class StockItem(StockTracker):
         super().__init__(code, description, amount)
 
 
+
 def command_line():
-    CLI = True
-    tracker = StockTracker(1,2,3)
-    while CLI == True:
+    run_cli = True
+    tracker = StockTracker(1, 2, 3)
+
+    while run_cli:
         print("What do you want to do?\n1.Add a stock item\n2.Update stock item\n3.Display details of item\n4.Display "
               "the entire stock list\n5.Exit")
         user_input = input("Please enter your selection: \n")
@@ -60,23 +69,24 @@ def command_line():
             code_input = input("Item Code: ")
             desc_input = input("Item Description: ")
             amount_input = input("Item Amount: ")
-
             tracker.write_item(code_input, desc_input, amount_input)
-
             print("\n{} | {} | {}| \nItem added to stock!\n".format(code_input,desc_input,amount_input))
+
         elif user_input == "2":
             old_value = input("Input the value you want to change: ")
             new_value = input("Input the new value: ")
-
             tracker.update_item(old_value, new_value)
             print(old_value, " changed to ", new_value)
+
         elif user_input == "3":
-            pass
+            choose_item = input("Enter code for the item you want to check: ")
+
+            tracker.show_item(choose_item)
         elif user_input == "4":
-            pass
+            tracker.show_stock()
         elif user_input == "5":
             print("Exiting...")
-            CLI = False
+            run_cli = False
 
 
 def incoming_connection():

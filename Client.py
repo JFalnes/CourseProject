@@ -49,21 +49,6 @@ def add_item():
     messagebox.showinfo("Item Added", abc)
 
 
-def update_item():
-    a = codeVar.get()
-    b = descVar.get()
-    c = amountVar.get()
-    client_socket.send(bytes(("@@updateitem?{}:{}:{}".format(a, b, c)), 'utf8'))
-
-
-def show_stock():
-    a = codeVar.get()
-    b = descVar.get()
-    c = amountVar.get()
-    """sends a request to the server to show the stock"""
-    client_socket.send(bytes('@@showstock?{}:{}:{}'.format(a, b, c), 'utf8'))
-
-
 def get_help():
     """for displaying the menu option 'help'"""
     messagebox.showinfo("Help", "")
@@ -98,8 +83,7 @@ def tk_window():
     labelAmount = Label(window, text="Amount: ")
     addBtn = Button(window, text="Add", relief="raised", command=add_item)
     exitBtn = Button(window, text="Exit", relief="raised", command=exit_def)
-    updateBtn = Button(window, text="Update", relief="raised", command=update_item)
-    showBtn = Button(window, text="Show Stock", relief="raised", command=show_stock)
+
     labelCode.grid(row=0, column=0)
     labelDesc.grid(row=1, column=0)
     labelAmount.grid(row=2, column=0)
@@ -108,8 +92,6 @@ def tk_window():
     entry_amount.grid(row=2, column=1)
     addBtn.grid(row=3, column=1)
     exitBtn.grid(row=3, column=2)
-    updateBtn.grid(row=3, column=0)
-    showBtn.grid(row=3, column=3)
 
     window.mainloop()
 

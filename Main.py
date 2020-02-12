@@ -12,8 +12,8 @@ logFormat = "%(asctime)s: %(message)s"
 logging.basicConfig(format=logFormat, level=logging.INFO,
                     datefmt="%H:%M:%S")
 
-class StockTracker:
 
+class StockTracker:
     def __init__(self, code, desc, amount):
         self.code = code
         self.desc = desc

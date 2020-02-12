@@ -25,6 +25,7 @@ def write_item(code, desc, amount):
 
 
 def command_line():
+    """Work in progress"""
     while True:
         print("What do you want to do?\n1.Add a stock item\n2.Update stock item\n3.Display details of item\n4.Display "
               "the entire stock list\n5.Exit")

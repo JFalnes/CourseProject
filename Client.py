@@ -7,13 +7,12 @@ import threading
 
 # VARIABLES
 HOST = "127.0.0.1"
-PORT = 60000
+PORT = 20049
 BUFFER = 1024
 ADDR = (HOST, PORT)
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # LOGGING
-
 logFormat = "%(asctime)s: %(message)s"
 logging.basicConfig(format=logFormat, level=logging.INFO,
                     datefmt="%H:%M:%S")
@@ -49,9 +48,7 @@ def add_item():
     messagebox.showinfo("Item Added", abc)
 
 
-def get_help():
-    """for displaying the menu option 'help'"""
-    messagebox.showinfo("Help", "")
+
 
 
 def tk_window():
@@ -61,38 +58,43 @@ def tk_window():
     global descVar
     global amountVar
 
+    # Creates the window object, adds a title, sets the size of the window
+    # and makes it non-resizable
     window = Tk()
     window.title("Add a stock item to the server")
     window.geometry("500x500")
     window.resizable(False, False)
 
+    # define StringVars for the Entry-fields
     codeVar = StringVar()
     descVar = StringVar()
     amountVar = StringVar()
 
+    # create entry-fields
     entry_code = Entry(window, textvar=codeVar)
     entry_desc = Entry(window, textvar=descVar)
     entry_amount = Entry(window, textvar=amountVar)
 
-    help_menu = Menu(window)
-    help_menu.add_command(label="Help", command=get_help)
-    window.config(menu=help_menu)
+    # create labels, define what text they have
+    label_code = Label(window, text="Code: ")
+    label_desc = Label(window, text="Description: ")
+    label_amount = Label(window, text="Amount: ")
 
-    labelCode = Label(window, text="Code: ")
-    labelDesc = Label(window, text="Description: ")
-    labelAmount = Label(window, text="Amount: ")
-    addBtn = Button(window, text="Add", relief="raised", command=add_item)
-    exitBtn = Button(window, text="Exit", relief="raised", command=exit_def)
+    #create buttons,
+    add_btn = Button(window, text="Add", relief="raised", command=add_item)
+    exit_btn = Button(window, text="Exit", relief="raised", command=exit_def)
 
-    labelCode.grid(row=0, column=0)
-    labelDesc.grid(row=1, column=0)
-    labelAmount.grid(row=2, column=0)
+    # place all the previously created objects on a grid
+    label_code.grid(row=0, column=0)
+    label_desc.grid(row=1, column=0)
+    label_amount.grid(row=2, column=0)
     entry_code.grid(row=0, column=1)
     entry_desc.grid(row=1, column=1)
     entry_amount.grid(row=2, column=1)
-    addBtn.grid(row=3, column=1)
-    exitBtn.grid(row=3, column=2)
+    add_btn.grid(row=3, column=1)
+    exit_btn.grid(row=3, column=2)
 
+    # put the window object in the mainloop
     window.mainloop()
 
 # Try to connect to the server, expect a Connection Refused Error if the server is unavailable
@@ -102,7 +104,7 @@ try:
 except ConnectionRefusedError:
     conn_ref = messagebox.showinfo("Connection Refused", "Connection Refused. Please try again.")
 
-# Starting threads for conn_recv and tk_window
+# Starting threads for conn_recv and tk_window, letting the two functions run in parallell
 t3 = threading.Thread(target=conn_recv)
 t3.start()
 t4 = threading.Thread(target=tk_window)

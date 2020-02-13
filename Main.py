@@ -3,6 +3,7 @@ import threading
 import logging
 import csv
 
+# Variables
 HOST = "127.0.0.1"
 PORT = 60000
 BUFFER = 1024
@@ -13,14 +14,23 @@ logging.basicConfig(format=logFormat, level=logging.INFO,
                     datefmt="%H:%M:%S")
 
 
-class StockTracker:
-    def __init__(self, code, desc, amount):
+class StockItem:
+    def __init__(self, code, desc, amount, choose_item, new_value, old_value):
         self.code = code
         self.desc = desc
         self.amount = amount
+        self.choose_item = choose_item
+        self.new_value = new_value
+        self.old_value = old_value
 
-    def write_item(self, code, desc, amount):
+
+class StockTracker(StockItem):
+    def __init__(self, code, desc, amount, choose_item, new_value, old_value):
+        super().__init__(code, desc, amount, choose_item, new_value, old_value)
+
+    def write_item(self):
         """Write items to stock.csv"""
+
         in_list = [self.code, self.desc, self.amount]
         with open('stock.csv', 'a', newline='') as csv_file:
             writer = csv.writer(csv_file, delimiter=";")
@@ -51,15 +61,8 @@ class StockTracker:
                 print(row.strip().replace(";", " "))
 
 
-class StockItem(StockTracker):
-    def __init__(self, code, description, amount):
-        super().__init__(code, description, amount)
-
-
-
 def command_line():
     run_cli = True
-    tracker = StockTracker(1, 2, 3)
 
     while run_cli:
         print("What do you want to do?\n1.Add a stock item\n2.Update stock item\n3.Display details of item\n4.Display "
@@ -69,13 +72,15 @@ def command_line():
             code_input = input("Item Code: ")
             desc_input = input("Item Description: ")
             amount_input = input("Item Amount: ")
+            tracker = StockTracker()
             tracker.write_item(code_input, desc_input, amount_input)
             print("\n{} | {} | {}| \nItem added to stock!\n".format(code_input,desc_input,amount_input))
 
         elif user_input == "2":
             old_value = input("Input the value you want to change: ")
             new_value = input("Input the new value: ")
-            tracker.update_item(old_value, new_value)
+            tracker_input = StockTracker()
+            tracker_input.update_item(old_value, new_value)
             print(old_value, " changed to ", new_value)
 
         elif user_input == "3":
@@ -117,7 +122,7 @@ def csv_edit(coderecv):
         print(amount)
         logging.info(str(addr) + " sent: " + coderecv)
 
-        a = StockItem(code, desc, amount)
+        a = StockTracker(code, desc, amount)
         a.write_item(code, desc, amount)
 
 

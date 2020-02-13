@@ -4,7 +4,7 @@ from tkinter import messagebox
 import socket
 import logging
 import threading
-# GLOBAL VARIABLES
+
 # VARIABLES
 HOST = "127.0.0.1"
 PORT = 60000
@@ -95,13 +95,14 @@ def tk_window():
 
     window.mainloop()
 
-
+# Try to connect to the server, expect a Connection Refused Error if the server is unavailable
 try:
     client_socket.connect(ADDR)
 
 except ConnectionRefusedError:
     conn_ref = messagebox.showinfo("Connection Refused", "Connection Refused. Please try again.")
 
+# Starting threads for conn_recv and tk_window
 t3 = threading.Thread(target=conn_recv)
 t3.start()
 t4 = threading.Thread(target=tk_window)

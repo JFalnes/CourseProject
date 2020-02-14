@@ -24,11 +24,14 @@ class StockItem:
         self.old_value = old_value
         self.new_value = new_value
         self.choose_item = choose_item
+
     def __str__(self):
         return "This is an overridden built-in python function"
 
+
 call_str = StockItem(1,2,3,4,5,6)
 print(call_str.__str__())
+
 
 # class StockTracker derives from class StockItem
 class StockTracker(StockItem):

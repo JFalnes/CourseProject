@@ -24,11 +24,14 @@ class StockItem:
         self.old_value = old_value
         self.new_value = new_value
         self.choose_item = choose_item
+
     def __str__(self):
         return "This is an overridden built-in python function"
 
-call_str = StockItem(1,2,3,4,5,6)
+
+call_str = StockItem(1, 2, 3, 4, 5, 6)
 print(call_str.__str__())
+
 
 # class StockTracker derives from class StockItem
 class StockTracker(StockItem):
@@ -46,7 +49,7 @@ class StockTracker(StockItem):
         # the key in the first dictionary is the item-code, the values are the description
         # and amount
 
-        json_data = {self.code:{
+        json_data = {self.code: {
                          "desc": self.desc,
                          "amount": self.amount}
         }
@@ -72,37 +75,36 @@ class StockTracker(StockItem):
     def update_item(self):
         # First, read in the file and convert JSON -> python objects
         with open('data_file.json', 'r') as f:
-            json_data = json.load(f)
+            json_file = json.load(f)
         # Check to see if self.code is in data_file, if it is then replace the "amount" keys value to be the new_value
-        for each_dict in json_data:
+        for each_dict in json_file:
             if self.code in each_dict:
                 each_dict[self.code]["amount"] = self.new_value
 
         # Write out data by converting objects -> JSON and
         # writing it to disk
         with open('data_file.json', 'w') as f:
-            json.dump(json_data, f, indent=2)
+            json.dump(json_file, f, indent=2)
 
     def show_item(self):
         with open('data_file.json', 'r') as f:
-            json_data = json.load(f)
-            #print(json_data[0])
-            for each_dict in json_data:
-                for k,v in each_dict.items():
+            json_file = json.load(f)
+            for each_dict in json_file:
+                for k, v in each_dict.items():
                     if k == self.choose_item:
-                        print(v)
+                        print(k, v)
 
     def show_stock(self):
         """show key, value in datafile.json"""
         with open('data_file.json', 'r') as f:
             json_data = json.load(f)
             for each_dict in json_data:
-                for k, v in each_dict.items():
-                    print(v)
+                print(each_dict)
 
 
 call_str = StockTracker(1, 2, 3, 4, 5, 6)
 print(call_str.__repr__())
+
 
 def command_line():
     """allows the user to choose what to do based on input"""
@@ -119,7 +121,7 @@ def command_line():
             amount_input = input("Item Amount: ")
             tracker = StockTracker(code_input, desc_input, amount_input, 4, 5, 6)
             tracker.write_item()
-            print("\n{} | {} | {}| \nItem added to stock!\n".format(code_input,desc_input,amount_input))
+            print("\n{} | {} | {}| \nItem added to stock!\n".format(code_input, desc_input, amount_input))
 
         elif user_input == "2":
             code = input("Input code of the item: ")
@@ -171,7 +173,7 @@ def json_add(coderecv):
         print(amount)
         logging.info(str(addr) + " sent: " + coderecv)
 
-        a = StockTracker(code, desc, amount,1,2,3)
+        a = StockTracker(code, desc, amount, 1, 2, 3)
         a.write_item()
 
 

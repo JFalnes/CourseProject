@@ -24,21 +24,16 @@ def conn_recv():
     logging.info(client_recv)
 
 
-def exit_def():
-    """exits the program when the exit button is pressed"""
-    exit()
-
-
 def add_item():
-    """Send """
+    """Send input in the entryfields in the GUI to the server"""
     # Get the text from the entry fields
-    a = codeVar.get()
-    b = descVar.get()
-    c = amountVar.get()
+    code = codeVar.get()
+    desc = descVar.get()
+    amount = amountVar.get()
     logging.info("Item added")
 
     # Concatenate the text from the entry fields into a single variable
-    abc = "{}:{}:{}".format(a, b, c)
+    abc = "{}:{}:{}".format(code, desc, amount)
     logging.info(abc + " sent to server")
 
     # Send abc to server,
@@ -47,12 +42,13 @@ def add_item():
     # Messagebox showing which items were added
     messagebox.showinfo("Item Added", abc)
 
-
-
+def exit_def():
+    """exits the program when the exit button is pressed"""
+    exit()
 
 
 def tk_window():
-    """function that displays a tkinter gui"""
+    """function that displays a tkinter gui with 2 buttons (add and exit), 3 fields which saves to a StringVar"""
     # Global variables
     global codeVar
     global descVar
@@ -105,7 +101,7 @@ except ConnectionRefusedError:
     conn_ref = messagebox.showinfo("Connection Refused", "Connection Refused. Please try again.")
 
 # Starting threads for conn_recv and tk_window, letting the two functions run in parallell
-t3 = threading.Thread(target=conn_recv)
-t3.start()
-t4 = threading.Thread(target=tk_window)
-t4.start()
+conn_thread = threading.Thread(target=conn_recv)
+conn_thread.start()
+gui_thread = threading.Thread(target=tk_window)
+gui_thread.start()

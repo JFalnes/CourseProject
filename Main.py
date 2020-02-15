@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 # IMPORTS
 import socket
 import threading
@@ -5,7 +6,7 @@ import logging
 import json
 
 # VARIABLES
-HOST = '127.0.0.1'
+HOST = '172.24.7.108'
 PORT = 20049
 BUFFER = 1024
 addresses = {}
@@ -56,22 +57,22 @@ class StockTracker(StockItem):
         }
 
         # opens data_file.json for append + binary + update
-        with open('data_file.json', 'ab+') as f:
+        with open('data_file.json', 'ab+') as json_f:
             # Go to the end of file
-            f.seek(0, 2)
+            json_f.seek(0, 2)
             # Check if file is empty
-            if f.tell() == 0:
+            if json_f.tell() == 0:
                 # If empty, write an array
-                f.write(json.dumps([json_data], indent=2).encode())
+                json_f.write(json.dumps([json_data], indent=2).encode())
             else:
-                f.seek(-1, 2)
+                json_f.seek(-1, 2)
                 # Remove the last character, open the array
-                f.truncate()
+                json_f.truncate()
                 # separate json objects
-                f.write(' , '.encode())
+                json_f.write(' , '.encode())
                 # dump dictionary to json_data
-                f.write(json.dumps(json_data, indent=2).encode())
-                f.write(']'.encode())
+                json_f.write(json.dumps(json_data, indent=2).encode())
+                json_f.write(']'.encode())
 
     def update_item(self):
         # First, read in the file and convert JSON -> python objects

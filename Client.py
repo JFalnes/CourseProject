@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 # IMPORT
 from tkinter import *
 from tkinter import messagebox
@@ -40,7 +41,7 @@ def add_item():
     client_socket.send(bytes(abc, 'utf8'))
 
     # Messagebox showing which items were added
-    messagebox.showinfo('Item Added', abc)
+    messagebox.showinfo('Item Added', 'Code: {}, Description: {}, Amount: {} added to stock'.format(code, desc, amount))
 
 def exit_def():
     """exits the program when the exit button is pressed"""

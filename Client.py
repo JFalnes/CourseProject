@@ -6,16 +6,16 @@ import logging
 import threading
 
 # VARIABLES
-HOST = "127.0.0.1"
+HOST = '127.0.0.1'
 PORT = 20049
 BUFFER = 1024
 ADDR = (HOST, PORT)
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # LOGGING
-logFormat = "%(asctime)s: %(message)s"
+logFormat = '%(asctime)s: %(message)s'
 logging.basicConfig(format=logFormat, level=logging.INFO,
-                    datefmt="%H:%M:%S")
+                    datefmt='%H:%M:%S')
 
 
 def conn_recv():
@@ -30,17 +30,17 @@ def add_item():
     code = codeVar.get()
     desc = descVar.get()
     amount = amountVar.get()
-    logging.info("Item added")
+    logging.info('Item added')
 
     # Concatenate the text from the entry fields into a single variable
-    abc = "{}:{}:{}".format(code, desc, amount)
-    logging.info(abc + " sent to server")
+    abc = '{}:{}:{}'.format(code, desc, amount)
+    logging.info(abc + ' sent to server')
 
     # Send abc to server,
     client_socket.send(bytes(abc, 'utf8'))
 
     # Messagebox showing which items were added
-    messagebox.showinfo("Item Added", abc)
+    messagebox.showinfo('Item Added', abc)
 
 def exit_def():
     """exits the program when the exit button is pressed"""
@@ -57,8 +57,8 @@ def tk_window():
     # Creates the window object, adds a title, sets the size of the window
     # and makes it non-resizable
     window = Tk()
-    window.title("Add a stock item to the server")
-    window.geometry("500x500")
+    window.title('StockItAll')
+    window.geometry("300x150")
     window.resizable(False, False)
 
     # define StringVars for the Entry-fields
@@ -72,13 +72,13 @@ def tk_window():
     entry_amount = Entry(window, textvar=amountVar)
 
     # create labels, define what text they have
-    label_code = Label(window, text="Code: ")
-    label_desc = Label(window, text="Description: ")
-    label_amount = Label(window, text="Amount: ")
+    label_code = Label(window, text='Code: ')
+    label_desc = Label(window, text='Description: ')
+    label_amount = Label(window, text='Amount: ')
 
     #create buttons,
-    add_btn = Button(window, text="Add", relief="raised", command=add_item)
-    exit_btn = Button(window, text="Exit", relief="raised", command=exit_def)
+    add_btn = Button(window, text='Add',relief='raised', command=add_item)
+    exit_btn = Button(window, text='Exit', relief='raised', command=exit_def)
 
     # place all the previously created objects on a grid
     label_code.grid(row=0, column=0)
@@ -98,7 +98,7 @@ try:
     client_socket.connect(ADDR)
 
 except ConnectionRefusedError:
-    conn_ref = messagebox.showinfo("Connection Refused", "Connection Refused. Please try again.")
+    conn_ref = messagebox.showinfo('Connection Refused", "Connection Refused. Please try again.')
 
 # Starting threads for conn_recv and tk_window, letting the two functions run in parallell
 conn_thread = threading.Thread(target=conn_recv)

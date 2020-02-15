@@ -1,16 +1,17 @@
+# IMPORTS
 import socket
 import threading
 import logging
 import json
 
 # VARIABLES
-HOST = "127.0.0.1"
+HOST = '127.0.0.1'
 PORT = 20049
 BUFFER = 1024
 addresses = {}
 
 # LOGGING
-logFormat = "%(asctime)s: %(message)s"
+logFormat = '%(asctime)s: %(message)s'
 logging.basicConfig(format=logFormat, level=logging.INFO,
                     datefmt="%H:%M:%S")
 
@@ -26,7 +27,7 @@ class StockItem:
         self.choose_item = choose_item
 
     def __str__(self):
-        return "This is an overridden built-in python function"
+        return 'This is an overridden built-in python function'
 
 
 call_str = StockItem(1, 2, 3, 4, 5, 6)
@@ -39,7 +40,7 @@ class StockTracker(StockItem):
         super().__init__(code, desc, amount, old_value, new_value, choose_item)
 
     def __repr__(self):
-        return "This is an overridden built-in python function"
+        return 'This is an overridden built-in python function'
 
     def write_item(self):
         """Write items to data_file.json, takes three parameters (code, desc, amount)
@@ -79,7 +80,7 @@ class StockTracker(StockItem):
         # Check to see if self.code is in data_file, if it is then replace the "amount" keys value to be the new_value
         for each_dict in json_file:
             if self.code in each_dict:
-                each_dict[self.code]["amount"] = self.new_value
+                each_dict[self.code]['amount'] = self.new_value
 
         # Write out data by converting objects -> JSON and
         # writing it to disk
@@ -112,33 +113,33 @@ def command_line():
 
     run_cli = True
     while run_cli:
-        print("What do you want to do?\n1.Add a stock item\n2.Update stock item\n3.Display details of item\n4.Display "
-              "the entire stock list\n5.Exit")
-        user_input = input("Please enter your selection: \n")
-        if user_input == "1":
-            code_input = input("Item Code: ")
-            desc_input = input("Item Description: ")
-            amount_input = input("Item Amount: ")
+        print('What do you want to do?\n1.Add a stock item\n2.Update stock item\n3.Display details of item\n4.Display '
+              'the entire stock list\n5.Exit')
+        user_input = input('Please enter your selection: \n')
+        if user_input == '1':
+            code_input = input('Item Code: ')
+            desc_input = input('Item Description: ')
+            amount_input = input('Item Amount: ')
             tracker = StockTracker(code_input, desc_input, amount_input, 4, 5, 6)
             tracker.write_item()
-            print("\n{} | {} | {}| \nItem added to stock!\n".format(code_input, desc_input, amount_input))
+            print('\n{} | {} | {}| \nItem added to stock!\n'.format(code_input, desc_input, amount_input))
 
-        elif user_input == "2":
-            code = input("Input code of the item: ")
-            new_value = input("Input the new stock amount: ")
+        elif user_input == '2':
+            code = input('Input code of the item: ')
+            new_value = input('Input the new stock amount:' )
             tracker = StockTracker(code,2,3,4, new_value, 4)
             tracker.update_item()
 
-            print(" changed to ", new_value)
+            print(code, ' changed the stock on hand to ', new_value)
 
-        elif user_input == "3":
-            choose_item = input("Enter code for the item you want to check: ")
+        elif user_input == '3':
+            choose_item = input('Enter code for the item you want to check: ')
             tracker = StockTracker(1, 2, 3, 4, 5, choose_item)
             tracker.show_item()
-        elif user_input == "4":
+        elif user_input == '4':
             tracker.show_stock()
-        elif user_input == "5":
-            print("Exiting...")
+        elif user_input == '5':
+            print('Exiting...')
             run_cli = False
 
 
@@ -164,14 +165,14 @@ def handle_conn(client):
 
 
 def json_add(coderecv):
-        x = coderecv.split(":")
+        x = coderecv.split(':')
         code = x[0]
         desc = x[1]
         amount = x[2]
         print(code)
         print(desc)
         print(amount)
-        logging.info(str(addr) + " sent: " + coderecv)
+        logging.info(str(addr) + ' sent: ' + coderecv)
 
         a = StockTracker(code, desc, amount, 1, 2, 3)
         a.write_item()
@@ -180,7 +181,7 @@ def json_add(coderecv):
 socket_serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # IPv4 / TCP
 socket_serv.bind((HOST, PORT))
 socket_serv.listen(5)
-logging.info("Waiting for connection...")
+logging.info('Waiting for connection...')
 
 thread_cli = threading.Thread(target=command_line)
 thread_cli.daemon = True

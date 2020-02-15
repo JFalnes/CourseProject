@@ -6,7 +6,7 @@ import logging
 import json
 
 # VARIABLES
-HOST = '172.24.7.108'
+HOST = '127.0.0.1'
 PORT = 20049
 BUFFER = 1024
 addresses = {}
@@ -31,15 +31,12 @@ class StockItem:
         return 'This is an overridden built-in python function'
 
 
-call_str = StockItem(1, 2, 3, 4, 5, 6)
-print(call_str.__str__())
-
-
 # class StockTracker derives from class StockItem
 class StockTracker(StockItem):
     def __init__(self, code, desc, amount, old_value, new_value, choose_item):
         super().__init__(code, desc, amount, old_value, new_value, choose_item)
 
+    # overridden built-in python function
     def __repr__(self):
         return 'This is an overridden built-in python function'
 
@@ -102,10 +99,6 @@ class StockTracker(StockItem):
             json_data = json.load(f)
             for each_dict in json_data:
                 print(each_dict)
-
-
-call_str = StockTracker(1, 2, 3, 4, 5, 6)
-print(call_str.__repr__())
 
 
 def command_line():

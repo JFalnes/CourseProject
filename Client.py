@@ -44,7 +44,7 @@ def add_item():
     messagebox.showinfo('Item Added', 'Code: {}, Description: {}, Amount: {} added to stock'.format(code, desc, amount))
 
 def exit_def():
-    """exits the program when the exit button is pressed"""
+    """exits the program when the exit button is pressed in the GUI"""
     exit()
 
 
@@ -59,7 +59,7 @@ def tk_window():
     # and makes it non-resizable
     window = Tk()
     window.title('StockItAll')
-    window.geometry("300x150")
+    window.geometry('300x150')
     window.resizable(False, False)
 
     # define StringVars for the Entry-fields

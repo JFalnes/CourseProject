@@ -86,10 +86,14 @@ class StockTracker(StockItem):
             json.dump(json_file, f, indent=2)
 
     def show_item(self):
+        # Reads file and converts to JSON
         with open('data_file.json', 'r') as f:
             json_file = json.load(f)
+            # Scans each dictionary in json_file
             for each_dict in json_file:
+                # Scans each dictionary in each_dict
                 for k, v in each_dict.items():
+                    # If the key == user input, print the key and value pair
                     if k == self.choose_item:
                         print(k, v)
 
@@ -102,51 +106,73 @@ class StockTracker(StockItem):
 
 
 def command_line():
-    """allows the user to choose what to do based on input"""
+    """chooses what methods to use depending on user input"""
+    # create StockTracker object
     tracker = StockTracker(1, 2, 3, 4, 5, 6)
 
+    # set run_cli to true
     run_cli = True
+    # while run_cli = true, run the CLI
     while run_cli:
+        # display options to user
         print('What do you want to do?\n1.Add a stock item\n2.Update stock item\n3.Display details of item\n4.Display '
               'the entire stock list\n5.Exit')
+        # ask user for input
         user_input = input('Please enter your selection: \n')
         if user_input == '1':
+            # variables for code, desc and amount
             code_input = input('Item Code: ')
             desc_input = input('Item Description: ')
             amount_input = input('Item Amount: ')
-            tracker = StockTracker(code_input, desc_input, amount_input, 4, 5, 6)
-            tracker.write_item()
+            # create new StockTracker object and start method
+            add_tracker = StockTracker(code_input, desc_input, amount_input, 4, 5, 6)
+            add_tracker.write_item()
+            # assure the user the stock has been added
             print('\n{} | {} | {}| \nItem added to stock!\n'.format(code_input, desc_input, amount_input))
 
         elif user_input == '2':
+            # code of item to change
             code = input('Input code of the item: ')
+            # new amount, replaces the old one
             new_value = input('Input the new stock amount:' )
-            tracker = StockTracker(code,2,3,4, new_value, 4)
-            tracker.update_item()
-
+            # new StockTracker object
+            change_tracker = StockTracker(code, 2, 3, 4, new_value, 4)
+            change_tracker.update_item()
             print(code, ' changed the stock on hand to ', new_value)
 
         elif user_input == '3':
+            # ask user which item to display
             choose_item = input('Enter code for the item you want to check: ')
-            tracker = StockTracker(1, 2, 3, 4, 5, choose_item)
-            tracker.show_item()
+            # display selcted item
+            track_item = StockTracker(1, 2, 3, 4, 5, choose_item)
+            track_item.show_item()
         elif user_input == '4':
+            # show entire stock
             tracker.show_stock()
         elif user_input == '5':
+            # set run_cli to false and exit
             print('Exiting...')
             run_cli = False
 
 
 def incoming_connection():
     """Function for handling incoming connections from a client starts a new thread for function handle_conn"""
+    # GLOBAL VARIABLES
     global addr
     global conn
+    # While loop
     while True:
+        # client
         conn, addr = socket_serv.accept()
+        # add address to list
         addresses[conn] = addr
+        # when a client connects, display a log msg with IP of client
         logging.info(f'Connection established with {str(addr)}')
+        # send message to all clients when client connects
         conn.sendall(bytes(('Connection Established with ' + str(addr)), 'utf8'))
+        # start handle_conn in a thread, pass the argument conn
         thread_handle = threading.Thread(target=handle_conn, args=(conn,))
+        # start the thread
         thread_handle.start()
 
 
@@ -163,9 +189,6 @@ def json_add(coderecv):
         code = x[0]
         desc = x[1]
         amount = x[2]
-        print(code)
-        print(desc)
-        print(amount)
         logging.info(str(addr) + ' sent: ' + coderecv)
 
         a = StockTracker(code, desc, amount, 1, 2, 3)

@@ -43,6 +43,7 @@ def add_item():
     # Messagebox showing which items were added
     messagebox.showinfo('Item Added', 'Code: {}, Description: {}, Amount: {} added to stock'.format(code, desc, amount))
 
+
 def exit_def():
     """exits the program when the exit button is pressed in the GUI"""
     exit()
@@ -77,8 +78,8 @@ def tk_window():
     label_desc = Label(window, text='Description: ')
     label_amount = Label(window, text='Amount: ')
 
-    #create buttons,
-    add_btn = Button(window, text='Add',relief='raised', command=add_item)
+    # create buttons,
+    add_btn = Button(window, text='Add', relief='raised', command=add_item)
     exit_btn = Button(window, text='Exit', relief='raised', command=exit_def)
 
     # place all the previously created objects on a grid
